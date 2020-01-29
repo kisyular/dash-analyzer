@@ -1,0 +1,32 @@
+<style>
+    .btn:hover {
+        cursor: pointer;
+    }
+</style>
+
+<table class="table table-hover table-bordered align-middle">
+    <tr>
+        <td>
+            <span id="post{{ post.id }}">{{ post.website_name }}</span>
+        </td>
+        <td>
+            {{ _('url added %(when)s',
+                    username=user_link, when=moment(post.timestamp).fromNow()) }}
+            <br>
+            <span id="post{{ post.id }}">{{ post.url }}</span>
+        </td>
+        <td id="clean{{ post.id }}">
+            <form method="POST" action="./visualize_data" style="display: inline">
+                <input id="website_name" type="hidden"
+                       value="{{ post.website_name }}" name="website_name">
+                <input id="website_url" type="hidden"
+                       value="{{ post.url }}" name="website_url">
+                <input id="timestamp" type="hidden"
+                       value="{{ post.timestamp }}" name="timestamp">
+                <input id="submitt" name="submitt" type="submit"
+                       class="btn btn-primary"
+                       value="Visualize" onclick="loading();">
+            </form>
+        </td>
+    </tr>
+</table>

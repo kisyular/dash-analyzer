@@ -3,16 +3,38 @@ from flask import redirect, render_template, request, url_for, flash
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.urls import url_parse
 from app.extensions import db
+from flask_babel import _
 from app.forms import RegistrationForm, LoginForm,\
-    ResetPasswordRequestForm, ResetPasswordForm
-from app.models import User
+    ResetPasswordRequestForm, ResetPasswordForm, PostForm
+from app.models import User, PostURL
+from flask import current_app
+
 
 server_bp = Blueprint('main', __name__)
 
 
 @server_bp.route('/')
+@server_bp.route('/index', methods=['GET', 'POST'])
+@login_required
 def index():
-    return render_template("index.html", title='Home Page')
+    form = PostForm()
+    if form.validate_on_submit():
+        web = PostURL(url=form.url.data, website_name=form.web_name.data)
+        db.session.add(web)
+        db.session.commit()
+        flash(form.web_name.data + ' ' + form.url.data)
+        flash(_('Your post is now live!'))
+        return redirect(url_for('main.index'))
+    page = request.args.get('page', 1, type=int)
+    posts_urls = PostURL.query.order_by(PostURL.timestamp.desc()).paginate(
+        page, current_app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('main.explore', page=posts_urls.next_num) \
+        if posts_urls.has_next else None
+    prev_url = url_for('main.explore', page=posts_urls.prev_num) \
+        if posts_urls.has_prev else None
+    return render_template('index.html', title=_('Home'), form=form,
+                           posts_url=posts_urls.items, next_url=next_url,
+                           prev_url=prev_url)
 
 
 @server_bp.route('/login/', methods=['GET', 'POST'])

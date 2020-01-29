@@ -2,13 +2,25 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block app_content %}
-{% if current_user.is_anonymous %}
-  <div class="alert alert-danger">
-      <h1>Hello, stranger!</h1>
-  </div>
-{% else  %}
-  <div class="alert alert-success">
-      <h1>Hi, {{ current_user.username }}!</h1>
-  </div>
-{% endif %}
+    {% if current_user.is_anonymous %}
+        <div class="alert alert-danger row">
+            <h1>Hello, stranger!</h1>
+        </div>
+    {% else %}
+        <div class="alert alert-success row">
+            <h1>Hi, {{ current_user.username }}!</h1>
+        </div>
+    {% endif %}
+
+    {% if form %}
+        <div class="alert alert-warning row">
+            <div class="col-sm-12">
+                {{ wtf.quick_form(form, button_map={'submit': 'primary'}) }}
+            </div>
+        </div>
+    {% endif %}
+
+    {% for post in posts_url %}
+        {% include '_posts_url.html' %}
+    {% endfor %}
 {% endblock %}
