@@ -8,7 +8,7 @@ from flask_moment import Moment
 from flask_babel import Babel, lazy_gettext as _l
 from flask_sqlalchemy import SQLAlchemy
 from config import BaseConfig
-
+import dash_bootstrap_components as dbc
 
 
 bootstrap = Bootstrap()
@@ -50,7 +50,8 @@ def register_dashapp(app, title, base_pathname, layout, register_callbacks_fun):
                            server=app,
                            url_base_pathname=f'/{base_pathname}/',
                            assets_folder=get_root_path(__name__) + f'/{base_pathname}/assets/',
-                           meta_tags=[meta_viewport])
+                           meta_tags=[meta_viewport],
+                           external_stylesheets=[dbc.themes.BOOTSTRAP])
 
     with app.app_context():
         my_dashapp.title = title

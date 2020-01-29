@@ -49,5 +49,13 @@ layout = html.Div([
         ],
         value='COKE'
     ),
-    dcc.Graph(id='my-graph')
-], style={'width': '500'})
+    dcc.Graph(id='my-graph'),
+    dcc.Input(
+        className="form-control",
+        id='my_input',
+        placeholder='Enter a value...',
+        type='text',
+        value=''
+    ),
+html.Div(id='my-div')
+], style={'width': '500'}, className="container",)

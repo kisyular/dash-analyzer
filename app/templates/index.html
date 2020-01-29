@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
-{% block content %}
+{% block app_content %}
 {% if current_user.is_anonymous %}
-  <h1>Hello, stranger!</h1>
+  <div class="alert alert-danger">
+      <h1>Hello, stranger!</h1>
+  </div>
 {% else  %}
-  <h1>Hi, {{ current_user.username }}!</h1>
+  <div class="alert alert-success">
+      <h1>Hi, {{ current_user.username }}!</h1>
+  </div>
 {% endif %}
 {% endblock %}
